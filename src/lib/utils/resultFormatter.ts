@@ -120,13 +120,13 @@ export function formatResult(result: number, operator: Operator | ''): Formatted
 
   return {
     value:
-      totalNumberResult > MAX_RESULT_LENGTH ? result.toExponential(6) : result.toString(),
+      totalNumberResult > MAX_RESULT_LENGTH ? formatWithLengthCap(result, 6) : result.toString(),
     isInfinity: false,
   };
 }
 
 export function formatRootResult(result: number): string {
-  return result.toFixed(getMinDecimalPlaces(result));
+  return formatWithLengthCap(result, getMinDecimalPlaces(result));
 }
 
 function formatWithLengthCap(result: number, preferredFractionDigits: number): string {

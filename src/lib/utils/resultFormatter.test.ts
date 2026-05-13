@@ -46,6 +46,8 @@ describe('resultFormatter', () => {
       isInfinity: false,
     });
     expect(formatResult(1000000000000, DIVISION_OPERATOR).value.length).toBeLessThanOrEqual(12);
+    expect(formatResult(1000000000000, '').value).toContain('e');
+    expect(formatResult(1000000000000, '').value.length).toBeLessThanOrEqual(12);
   });
 
   it('formats special values and root helpers', () => {
@@ -59,6 +61,7 @@ describe('resultFormatter', () => {
     });
     expect(formatRootResult(3)).toBe('3');
     expect(formatRootResult(3.5)).toMatch(/^3\.5/);
+    expect(formatRootResult(1000000000000)).toHaveLength(5);
     expect(formatReciprocalResult(0.5)).toBe('0.5');
     expect(formatReciprocalResult(0.1234567890123456)).toContain('e');
     expect(formatReciprocalResult(1000000000000)).toHaveLength(5);

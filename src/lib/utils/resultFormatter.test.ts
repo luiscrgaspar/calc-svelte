@@ -61,5 +61,6 @@ describe('resultFormatter', () => {
     expect(formatRootResult(3.5)).toMatch(/^3\.5/);
     expect(formatReciprocalResult(0.5)).toBe('0.5');
     expect(formatReciprocalResult(0.1234567890123456)).toContain('e');
+    expect(formatReciprocalResult(1000000000000)).toHaveLength(5);
   });
 });

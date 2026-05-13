@@ -129,6 +129,26 @@ export function formatRootResult(result: number): string {
   return result.toFixed(getMinDecimalPlaces(result));
 }
 
+function formatWithLengthCap(result: number, preferredFractionDigits: number): string {
+  const plainValue = result.toString();
+
+  if (plainValue.length <= MAX_RESULT_LENGTH) {
+    return plainValue;
+  }
+
+  for (let fractionDigits = preferredFractionDigits; fractionDigits >= 0; fractionDigits -= 1) {
+    const scientificValue = result.toExponential(fractionDigits);
+
+    if (scientificValue.length <= MAX_RESULT_LENGTH) {
+      return scientificValue;
+    }
+  }
+
+  return result.toExponential(0);
+}
+
 export function formatReciprocalResult(result: number): string {
-  return countDecimals(result) > MAX_RESULT_LENGTH ? result.toExponential(7) : result.toString();
+  const preferredFractionDigits = Math.min(countDecimals(result), 7);
+
+  return formatWithLengthCap(result, preferredFractionDigits);
 }

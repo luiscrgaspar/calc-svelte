@@ -31,6 +31,20 @@ describe('Calculator', () => {
     expect(screen.getByRole('status')).toHaveTextContent('5');
   });
 
+  it('starts a fresh decimal after equals', async () => {
+    const user = userEvent.setup();
+    render(Calculator);
+
+    await user.click(screen.getByRole('button', { name: '2' }));
+    await user.click(screen.getByRole('button', { name: '+' }));
+    await user.click(screen.getByRole('button', { name: '3' }));
+    await user.click(screen.getByRole('button', { name: '=' }));
+    await user.click(screen.getByRole('button', { name: '.' }));
+    await user.click(screen.getByRole('button', { name: '7' }));
+
+    expect(screen.getByRole('status')).toHaveTextContent('0.7');
+  });
+
   it('switches language and shows localized errors', async () => {
     const user = userEvent.setup();
     render(Calculator);

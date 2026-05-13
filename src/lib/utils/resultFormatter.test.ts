@@ -41,6 +41,11 @@ describe('resultFormatter', () => {
       isInfinity: false,
     });
     expect(formatResult(-12.3456789012345, DIVISION_OPERATOR).value).toContain('-');
+    expect(formatResult(1000000000000, DIVISION_OPERATOR)).toEqual({
+      value: expect.any(String),
+      isInfinity: false,
+    });
+    expect(formatResult(1000000000000, DIVISION_OPERATOR).value.length).toBeLessThanOrEqual(12);
   });
 
   it('formats special values and root helpers', () => {

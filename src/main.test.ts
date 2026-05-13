@@ -16,6 +16,7 @@ describe('main', () => {
   afterEach(() => {
     document.body.innerHTML = '';
     vi.clearAllMocks();
+    vi.resetModules();
   });
 
   it('boots the app into the root element', async () => {
@@ -25,5 +26,10 @@ describe('main', () => {
 
     expect(mountMock).toHaveBeenCalledTimes(1);
     expect(mountMock).toHaveBeenCalledWith({}, { target: document.getElementById('root') });
+  });
+
+  it('throws when the root element is missing', async () => {
+    await expect(import('./main')).rejects.toThrow('Root element "#root" was not found.');
+    expect(mountMock).not.toHaveBeenCalled();
   });
 });

@@ -25,8 +25,11 @@ describe('LanguageSwitch', () => {
       'calculator-language-active'
     );
 
+    expect(onChangeLanguage).not.toHaveBeenCalled();
+
     await user.click(screen.getByRole('button', { name: 'ES' }));
 
+    expect(onChangeLanguage).toHaveBeenCalledTimes(1);
     expect(onChangeLanguage).toHaveBeenCalledWith('es-ES');
   });
 });

@@ -208,10 +208,23 @@ export function createCalculatorController() {
     dispatch({ type: 'setError', payload: value });
   }
 
-  function clickOnPiKey() {
-    setCurrentValue(Math.PI.toFixed(11));
+  function clearTransientFailureState() {
     setError('');
     setIsInfinity(false);
+  }
+
+  function startFreshNumericEntry(value: string) {
+    setCurrentValue(value);
+    setCurrentTemporaryValue('0');
+    setCurrentOperator('');
+    setGoingToDoOperation(false);
+    setAlreadyDoneEqualOperation(false);
+    clearTransientFailureState();
+  }
+
+  function clickOnPiKey() {
+    setCurrentValue(Math.PI.toFixed(11));
+    clearTransientFailureState();
   }
 
   function clickOnCEKey() {
@@ -232,8 +245,7 @@ export function createCalculatorController() {
   function clickOnMRKey() {
     const currentState = get(state);
     setCurrentValue(currentState.currentMemoryValue);
-    setError('');
-    setIsInfinity(false);
+    clearTransientFailureState();
   }
 
   function clickOnMSKey() {
@@ -264,7 +276,7 @@ export function createCalculatorController() {
     const formattedResult = formatResult(result, currentState.currentOperator);
     const displayResult = formattedResult.isInfinity ? result.toString() : formattedResult.value;
 
-    setError('');
+    clearTransientFailureState();
     setIsInfinity(formattedResult.isInfinity);
     setCurrentValue(displayResult);
 
@@ -313,7 +325,7 @@ export function createCalculatorController() {
   }
 
   function setResultOperationOrInvalidInput(value: number, error: CalculatorErrorKey) {
-    setIsInfinity(false);
+    clearTransientFailureState();
 
     if (Number.isNaN(value)) {
       setError(error);
@@ -361,34 +373,37 @@ export function createCalculatorController() {
       return;
     }
 
-    setError('');
-    setIsInfinity(false);
+    clearTransientFailureState();
     setCurrentValue(formatReciprocalResult(result));
   }
 
   function clickOnEKey() {
     setCurrentValue(Math.E.toFixed(11));
-    setError('');
-    setIsInfinity(false);
+    clearTransientFailureState();
   }
 
   function clickOnNumber(number: string | number) {
     const currentState = get(state);
     const numberValue = number.toString();
 
-    if (currentState.alreadyDoneEqualOperation) {
-      setCurrentValue(numberValue);
-      setCurrentTemporaryValue('0');
-      setAlreadyDoneEqualOperation(false);
-      setCurrentOperator('');
+    if (currentState.error || currentState.isInfinity || currentState.alreadyDoneEqualOperation) {
+      startFreshNumericEntry(numberValue);
       return;
     }
 
+    clearTransientFailureState();
     dispatch({ type: 'addToCurrentValue', payload: numberValue });
   }
 
   function clickOnNumberZero() {
     const currentState = get(state);
+
+    if (currentState.error || currentState.isInfinity || currentState.alreadyDoneEqualOperation) {
+      startFreshNumericEntry('0');
+      return;
+    }
+
+    clearTransientFailureState();
 
     if (currentState.currentValue !== '0') {
       dispatch({ type: 'addToCurrentValue', payload: '0' });
@@ -402,6 +417,14 @@ export function createCalculatorController() {
 
   function clickOnPointKey() {
     const currentState = get(state);
+
+    if (currentState.error || currentState.isInfinity || currentState.alreadyDoneEqualOperation) {
+      startFreshNumericEntry('0');
+      dispatch({ type: 'addToCurrentValue', payload: '.' });
+      return;
+    }
+
+    clearTransientFailureState();
 
     if (
       currentState.goingToDoOperation ||

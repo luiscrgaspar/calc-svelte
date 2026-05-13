@@ -16,7 +16,7 @@ describe('CalculatorRow', () => {
             id: 'first',
             label: 'First',
             onClick: firstClick,
-            className: 'calculator-button calculator-button--special',
+            className: 'calculator-button--special',
           },
           {
             id: 'second',
@@ -31,11 +31,13 @@ describe('CalculatorRow', () => {
     const firstButton = screen.getByRole('button', { name: 'First' });
     const secondButton = screen.getByRole('button', { name: 'Second' });
 
+    expect(firstButton).toHaveClass('calculator-button');
     expect(firstButton).toHaveClass('calculator-button--special');
     expect(secondButton).toHaveClass('calculator-button');
     expect(secondButton).toBeDisabled();
 
     await user.click(firstButton);
+    await user.click(secondButton);
 
     expect(firstClick).toHaveBeenCalledTimes(1);
     expect(secondClick).not.toHaveBeenCalled();

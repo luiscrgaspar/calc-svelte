@@ -92,9 +92,28 @@ export function formatResult(result: number, operator: Operator | ''): Formatted
     const shouldUseFixedDecimal =
       result.toString().includes('e') ||
       Math.max(totalNumberResult, expandedResult.length) > MAX_RESULT_LENGTH;
+    const divisionValue = shouldUseFixedDecimal
+      ? result.toFixed(getMinDecimalPlaces(result))
+      : result.toString();
+    let formattedDivisionValue = divisionValue;
+
+    if (formattedDivisionValue.length > MAX_RESULT_LENGTH) {
+      for (let fractionDigits = 6; fractionDigits >= 0; fractionDigits -= 1) {
+        const scientificValue = result.toExponential(fractionDigits);
+
+        if (scientificValue.length <= MAX_RESULT_LENGTH) {
+          formattedDivisionValue = scientificValue;
+          break;
+        }
+      }
+
+      if (formattedDivisionValue.length > MAX_RESULT_LENGTH) {
+        formattedDivisionValue = result.toExponential(0);
+      }
+    }
 
     return {
-      value: shouldUseFixedDecimal ? result.toFixed(getMinDecimalPlaces(result)) : result.toString(),
+      value: formattedDivisionValue,
       isInfinity: false,
     };
   }

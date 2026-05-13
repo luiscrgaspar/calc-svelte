@@ -1,7 +1,7 @@
 :root {
   color-scheme: dark;
   font-family:
-    'Inter', 'Avenir Next', 'Segoe UI Variable', 'Segoe UI', ui-sans-serif, sans-serif;
+    Inter, "Avenir Next", "Segoe UI Variable", "Segoe UI", ui-sans-serif, sans-serif;
   --page-bg: #07111d;
   --page-bg-accent: #12263e;
   --shell-bg: rgba(12, 18, 32, 0.84);

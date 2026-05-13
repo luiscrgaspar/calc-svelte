@@ -1,6 +1,6 @@
 # Calc Svelte
 
-Calc Svelte is a Svelte 5 + TypeScript calculator built with Vite. It follows the same layered approach as the React reference app: pure calculator helpers, a small feature controller, presentational components, and automated unit and visual tests.
+Calc Svelte is a Svelte 5 + TypeScript calculator built with Vite. The app is organized around pure calculator helpers, a small feature controller, presentational components, and automated unit and visual tests.
 
 ## Features
 
@@ -92,4 +92,4 @@ yarn test:visual:update
 - `src/App.svelte` and `src/main.ts` wire the app into Vite and Svelte
 - `tests/visual/` contains the Playwright visual regression suite and snapshots
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for a deeper explanation of the design.
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for a deeper explanation of the design and data flow.

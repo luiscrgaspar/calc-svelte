@@ -2,7 +2,7 @@
 
 ## Overview
 
-This app stays intentionally small, but it is split into a few clear layers so the calculator rules remain easy to test:
+This app stays intentionally small, but it is split into a few clear layers so the calculator rules remain easy to test and reason about:
 
 - `src/lib/components/` for presentational Svelte components
 - `src/lib/features/calculator/` for the calculator state machine and view-model assembly
@@ -35,10 +35,15 @@ The goal is to keep business rules out of the view layer and make future changes
 - `src/lib/constants.ts` - shared button labels and operator constants
 - `src/lib/i18n.ts` - translated strings and language helpers
 - `src/lib/types.ts` - shared calculator and language types
-- `src/lib/components/Calculator.svelte` - calculator composition
+- `src/lib/components/Calculator.svelte` - calculator composition and controller wiring
 - `src/lib/components/Header.svelte` - result display
 - `src/lib/components/LanguageSwitch.svelte` - locale selector
 - `src/lib/components/CalculatorRow.svelte` - button row renderer
+
+## Snapshot Coverage
+
+- `tests/visual/playwright.config.ts` configures Playwright to store screenshots in a portable, per-test snapshot layout.
+- `tests/visual/calculator.spec.ts` covers the default shell, error states, language switching, and core arithmetic flows.
 
 ## Testing Strategy
 

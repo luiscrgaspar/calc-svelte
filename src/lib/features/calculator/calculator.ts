@@ -222,6 +222,20 @@ export function createCalculatorController() {
     clearTransientFailureState();
   }
 
+  function getDisplayValue(currentState: CalculatorState, currentLanguage: LanguageCode) {
+    if (currentState.error) {
+      return translate(currentLanguage, currentState.error);
+    }
+
+    if (currentState.isInfinity) {
+      return currentState.currentValue === '-Infinity'
+        ? translate(currentLanguage, '-infinity')
+        : translate(currentLanguage, 'infinity');
+    }
+
+    return currentState.currentValue;
+  }
+
   function clickOnPiKey() {
     setCurrentValue(Math.PI.toFixed(11));
     clearTransientFailureState();
@@ -310,18 +324,14 @@ export function createCalculatorController() {
     };
   }
 
-  function setFormattedCurrentValue(result: number) {
-    applyFormattedResult(result);
-  }
-
   function clickOnXToThePowerOf2() {
     const currentState = get(state);
-    setFormattedCurrentValue(calculateSquare(+currentState.currentValue));
+    applyFormattedResult(calculateSquare(+currentState.currentValue));
   }
 
   function clickOnXToThePowerOf3() {
     const currentState = get(state);
-    setFormattedCurrentValue(calculateCube(+currentState.currentValue));
+    applyFormattedResult(calculateCube(+currentState.currentValue));
   }
 
   function setResultOperationOrInvalidInput(value: number, error: CalculatorErrorKey) {
@@ -361,7 +371,7 @@ export function createCalculatorController() {
       return;
     }
 
-    setFormattedCurrentValue(result);
+    applyFormattedResult(result);
   }
 
   function clickOnOneDividedByX() {
@@ -455,7 +465,7 @@ export function createCalculatorController() {
     }
 
     setGoingToDoOperation(false);
-    setFormattedCurrentValue(result);
+    applyFormattedResult(result);
   }
 
   function operation(operator: Operator) {
@@ -590,13 +600,7 @@ export function createCalculatorController() {
 
     return {
       currentLanguage,
-      displayValue: currentState.error
-        ? translate(currentLanguage, currentState.error)
-        : currentState.isInfinity
-          ? currentState.currentValue === '-Infinity'
-            ? translate(currentLanguage, '-infinity')
-            : translate(currentLanguage, 'infinity')
-          : currentState.currentValue,
+      displayValue: getDisplayValue(currentState, currentLanguage),
       error: currentState.error,
       languages: currentState.languages,
       buttonRows: createButtonRows(currentState),
